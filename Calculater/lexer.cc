@@ -1,7 +1,5 @@
 #include "lexer.h"
 
-
-
 FCLexer::FCLexer(const ::std::string& input):m_inputSrc(input)
 {
 	m_curTok=' ';
@@ -9,21 +7,26 @@ FCLexer::FCLexer(const ::std::string& input):m_inputSrc(input)
 	m_currentIdx = m_inputSrc.cbegin();
 }
 
-FCLexer::result_value& FCLexer::getResult()
+LexerErrorCode FCLexer::getNextTok()
 {
-	return m_tokens;
-}
+	//处理由空白符分割的字符串，生成第一个字符串序列对应的语素
 
-LexerErrorCode FCLexer::getNextTok(token_value&)
-{
+	//跳过空白符
 	while (isspace(*m_currentIdx++));
+	
+	//处理标识符
+	//合法标识符应以字母开头
 	if(isalpha(*m_currentIdx))
 	{
-		
+		m_curTok = *m_currentIdx++;
+		//标识符由字母和数字组成
+		while (isalnum(*m_currentIdx))
+		{
+			m_curTok += *m_currentIdx++;
+		}
+
+		return LexerErrorCode::IDENTIFIER;
 	}
-}
 
-LexerErrorCode FCLexer::getLastTok(token_value&)
-{
-
+	return LexerErrorCode::INVALID;
 }
