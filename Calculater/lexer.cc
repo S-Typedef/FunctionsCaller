@@ -3,11 +3,10 @@
 FCLexer::FCLexer(const ::std::string& input):m_inputSrc(input)
 {
 	m_curTok=' ';
-	m_currentIdentifier = "";
 	m_currentIdx = m_inputSrc.cbegin();
 }
 
-LexerErrorCode FCLexer::getNextTok()
+LexerErrorCode FCLexer::generateNextTok()
 {
 	//处理由空白符分割的字符串，生成第一个字符串序列对应的语素
 
@@ -28,5 +27,10 @@ LexerErrorCode FCLexer::getNextTok()
 		return LexerErrorCode::IDENTIFIER;
 	}
 
+	return LexerErrorCode::INVALID;
+}
+
+LexerErrorCode FCLexer::getTok()
+{
 	return LexerErrorCode::INVALID;
 }
