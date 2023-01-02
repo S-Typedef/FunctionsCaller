@@ -3,4 +3,7 @@
 */build
 
 !Calculater
+
+!CMakeLists.txt
+
 !.gitignore
