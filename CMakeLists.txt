@@ -2,9 +2,7 @@
 
 project(FunctionsCaller) 
 
-aux_source_directory(./Calculater DIR_SRCS)
+enable_testing()
 
-message(STATUS ${DIR_SRCS})
-
-# add the executable 
-add_executable(${PROJECT_NAME} ${DIR_SRCS})
+add_subdirectory(src)
+add_subdirectory(test)

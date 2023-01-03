@@ -2,7 +2,9 @@
 
 */build
 
-!Calculater
+!header
+!src
+!test
 
 !CMakeLists.txt
 
