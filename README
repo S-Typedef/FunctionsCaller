@@ -1,0 +1,9 @@
+﻿构建:
+git clone https://github.com/S-Typedef/FunctionsCaller.git
+cd FunctionsCaller
+cmake -S . -B build
+cmake --build build
+
+测试:
+cd build
+ctest -C Debug
