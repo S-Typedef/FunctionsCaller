@@ -1,10 +1,7 @@
 ﻿#ifndef LEXER_H
 #define LEXER_H
 
-#include<memory>
 #include<string>
-#include<vector>
-#include<tuple>
 
 #include "lexerErrorInfo.h"
 
@@ -20,11 +17,16 @@ class FCLexer
 public:
 	FCLexer(const ::std::string&);
 	LexerErrorCode generateNextTok();
-	LexerErrorCode getTok();
+	item_type getTok();
+
+private:
+	bool inputRemain(){return m_currentIdx != m_inputEnd;}
+
 private:
 	item_type m_curTok;
 	iterator m_currentIdx;
 	::std::string m_inputSrc;
+	iterator m_inputEnd;
 };
 
 #endif
