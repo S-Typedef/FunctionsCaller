@@ -1,10 +1,10 @@
-#include "lexer.h"
+﻿#include "lexer.h"
 
 FCLexer::FCLexer(const ::std::string& input):m_inputSrc(input)
 {
 	m_curTok=' ';
 	m_currentIdx = m_inputSrc.cbegin();
-}
+} 
 
 LexerErrorCode FCLexer::generateNextTok()
 {

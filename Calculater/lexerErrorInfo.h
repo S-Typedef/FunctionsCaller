@@ -1,4 +1,4 @@
-enum class LexerErrorCode
+﻿enum class LexerErrorCode
 {
 	KEYWORD,
 	IDENTIFIER,
