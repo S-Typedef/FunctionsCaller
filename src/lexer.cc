@@ -35,7 +35,7 @@ LexerErrorCode FCLexer::generateNextTok()
 		//标识符由字母和数字组成
 		do
 		{
-			if(readInput())
+			if(!readInput())
 				break;
 			if(!isalnum(m_curTok))
 				return m_lastGenerateResult = LexerErrorCode::INVALID;
