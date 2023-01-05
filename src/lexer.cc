@@ -33,8 +33,15 @@ LexerErrorCode FCLexer::generateNextTok()
 	{
 		m_resTok.identifier = m_curTok;
 		//标识符由字母和数字组成
-		while (readInput() && isalnum(m_curTok))
+		do
+		{
+			if(readInput())
+				break;
+			if(!isalnum(m_curTok))
+				return LexerErrorCode::INVALID;
 			m_resTok.identifier += m_curTok;
+			
+		}while (true);
 		return LexerErrorCode::IDENTIFIER;
 	}
 
