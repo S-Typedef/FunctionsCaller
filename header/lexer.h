@@ -13,14 +13,16 @@ class FCExprAST;
 //读取输入字符串生成语法要素
 class FCLexer
 {
+	using iterator = ::std::string::const_iterator;
+	using tok_type = ::std::string::value_type;
+
+public:
 	struct item_type
 	{
 		int 			integetNumber = 0;
 		double 			floatNumber = 0.;
 		::std::string 	identifier;
 	};
-	using iterator = ::std::string::const_iterator;
-	using tok_type = ::std::string::value_type;
 
 public:
 	FCLexer(const ::std::string&);
