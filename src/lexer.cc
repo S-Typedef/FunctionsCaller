@@ -51,6 +51,8 @@ LexerErrorCode FCLexer::generateNextTok()
 			
 			if (!readInput())
 				break;
+			if(isspace(m_curTok))
+				break;
 			if(!(isdigit(m_curTok) || m_curTok == '.'))
 				return LexerErrorCode::INVALID;
 		} while (true);
