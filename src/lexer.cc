@@ -49,7 +49,11 @@ LexerErrorCode FCLexer::generateNextTok()
 			if(m_curTok == '.')
 				flagFloat = true;
 			
-		} while (readInput() && (isdigit(m_curTok) || m_curTok == '.'));
+			if (!readInput())
+				break;
+			if(!(isdigit(m_curTok) || m_curTok == '.'))
+				return LexerErrorCode::INVALID;
+		} while (true);
 		if(flagFloat)
 			return LexerErrorCode::DOUBLE;
 		return LexerErrorCode::INTEGER;
