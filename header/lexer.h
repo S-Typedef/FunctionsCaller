@@ -33,7 +33,7 @@ public:
 private:
 	bool readInput();
 private:
-	LexerErrorCode lastGenerateResult;
+	LexerErrorCode m_lastGenerateResult;
 
 	tok_type m_curTok;
 	item_type m_resTok;

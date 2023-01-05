@@ -38,11 +38,11 @@ LexerErrorCode FCLexer::generateNextTok()
 			if(readInput())
 				break;
 			if(!isalnum(m_curTok))
-				return LexerErrorCode::INVALID;
+				return m_lastGenerateResult = LexerErrorCode::INVALID;
 			m_resTok.identifier += m_curTok;
 			
 		}while (true);
-		return LexerErrorCode::IDENTIFIER;
+		return m_lastGenerateResult = LexerErrorCode::IDENTIFIER;
 	}
 
 	//数字字面量
@@ -61,18 +61,18 @@ LexerErrorCode FCLexer::generateNextTok()
 			if(isspace(m_curTok))
 				break;
 			if(!(isdigit(m_curTok) || m_curTok == '.'))
-				return LexerErrorCode::INVALID;
+				return m_lastGenerateResult = LexerErrorCode::INVALID;
 		} while (true);
 		if(flagFloat)
-			return LexerErrorCode::DOUBLE;
-		return LexerErrorCode::INTEGER;
+			return m_lastGenerateResult = LexerErrorCode::DOUBLE;
+		return m_lastGenerateResult = LexerErrorCode::INTEGER;
 	}
-	return LexerErrorCode::INVALID;
+	return m_lastGenerateResult = LexerErrorCode::INVALID;
 }
 
 ::std::optional<FCLexer::item_type> FCLexer::getTok()
 {
-	switch(lastGenerateResult)
+	switch(m_lastGenerateResult)
 	{
 		case LexerErrorCode::KEYWORD :
 		{

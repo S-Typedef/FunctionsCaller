@@ -6,55 +6,88 @@
 
 int main()
 {
-	FCLexer lexer1{"abc"};
-	FCLexer lexer2{"abc 1"};
-	FCLexer lexer3{"1abc"};
-	FCLexer lexer4{"abc1"};
-	FCLexer lexer5{"1"};
-	FCLexer lexer6{"1."};
-	FCLexer lexer7{"1 a"};
-	FCLexer lexer8{"1. a"};
-
-	auto func1 = [](auto optionalItem){
+	auto func1 = [](auto optionalItem, auto errorCode){
+		FCLexer::item_type res;
 		if(optionalItem)
 		{
-			switch (optionalItem.value())
+			res = optionalItem.value();
+			switch (errorCode)
 			{
 				case LexerErrorCode::INTEGER :
 				{
-					m_resTok.integetNumber = atoi(m_resTok.identifier.c_str());
-					m_resTok.identifier.clear();
-					return m_resTok;
+					res.integetNumber = atoi(res.identifier.c_str());
+					res.identifier.clear();
+					break;
 				}
 				case LexerErrorCode::DOUBLE :
 				{
-					m_resTok.floatNumber = strtod(m_resTok.identifier.c_str(), 0);
-					m_resTok.identifier.clear();
-					return m_resTok;
+					res.floatNumber = strtod(res.identifier.c_str(), 0);
+					res.identifier.clear();
+					break;
 				}
 				case LexerErrorCode::IDENTIFIER :
 				{
-					return m_resTok;
+					break;
 				}
 			}
 		}
+		return res;
 	};
 
-	assert(lexer1.generateNextTok() == LexerErrorCode::IDENTIFIER);
 
-	assert(lexer2.generateNextTok() == LexerErrorCode::IDENTIFIER);
+	{
+		FCLexer lexer{"abc"};
+		assert(lexer.generateNextTok() == LexerErrorCode::IDENTIFIER);
+		assert(func1(lexer.getTok(), LexerErrorCode::IDENTIFIER).identifier == "abc");
+	}
 
-	assert(lexer3.generateNextTok() == LexerErrorCode::INVALID);
+	{
+		FCLexer lexer{"abc "};
+		assert(lexer.generateNextTok() == LexerErrorCode::INVALID);
+	}
 
-	assert(lexer4.generateNextTok() == LexerErrorCode::IDENTIFIER);
+	{
+		FCLexer lexer{"abc1"};
+		assert(lexer.generateNextTok() == LexerErrorCode::IDENTIFIER);
+		assert(func1(lexer.getTok(), LexerErrorCode::IDENTIFIER).identifier == "abc1");
+	}
 
-	assert(lexer5.generateNextTok() == LexerErrorCode::INTEGER);
+	{
+		FCLexer lexer{"abc1."};
+		assert(lexer.generateNextTok() == LexerErrorCode::INVALID);
+	}
 
-	assert(lexer6.generateNextTok() == LexerErrorCode::DOUBLE);
+	{
+		FCLexer lexer{"1"};
+		assert(lexer.generateNextTok() == LexerErrorCode::INTEGER);
+		assert(func1(lexer.getTok(), LexerErrorCode::INTEGER).integetNumber == 1);
+	}
 
-	assert(lexer7.generateNextTok() == LexerErrorCode::INTEGER);
+	{
+		FCLexer lexer{"1."};
+		assert(lexer.generateNextTok() == LexerErrorCode::DOUBLE);
+		assert(abs(func1(lexer.getTok(), LexerErrorCode::DOUBLE).floatNumber - 1) <= 1e-5);
+	}
 
-	assert(lexer8.generateNextTok() == LexerErrorCode::DOUBLE);
+	{
+		FCLexer lexer{"1a"};
+		assert(lexer.generateNextTok() == LexerErrorCode::INVALID);
+	}
+
+	{
+		FCLexer lexer{"1.a"};
+		assert(lexer.generateNextTok() == LexerErrorCode::INVALID);
+	}
+
+	{
+		FCLexer lexer{"1 "};
+		assert(lexer.generateNextTok() == LexerErrorCode::INVALID);
+	}
+
+	{
+		FCLexer lexer{"1. "};
+		assert(lexer.generateNextTok() == LexerErrorCode::INVALID);
+	}
 
 	return 0;
 }
