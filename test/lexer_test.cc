@@ -38,17 +38,17 @@ int main()
 		}
 	};
 
-	assert(static_cast<int>(lexer1.generateNextTok()) == 1);
+	assert(lexer1.generateNextTok() == LexerErrorCode::IDENTIFIER);
 
-	assert(static_cast<int>(lexer2.generateNextTok()) == 1);
+	assert(lexer2.generateNextTok() == LexerErrorCode::IDENTIFIER);
 
-	assert(static_cast<int>(lexer3.generateNextTok()) == 4);
+	assert(lexer3.generateNextTok() == LexerErrorCode::INVALID);
 
-	assert(static_cast<int>(lexer4.generateNextTok()) == 1);
+	assert(lexer4.generateNextTok() == LexerErrorCode::IDENTIFIER);
 
-	assert(static_cast<int>(lexer5.generateNextTok()) == 4);
+	assert(lexer5.generateNextTok() == LexerErrorCode::INTEGER);
 
-	assert(static_cast<int>(lexer6.generateNextTok()) == 5);
+	assert(lexer6.generateNextTok() == LexerErrorCode::DOUBLE);
 
 	return 0;
 }
