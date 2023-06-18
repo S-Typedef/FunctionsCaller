@@ -27,7 +27,7 @@ public:
 
 public:
 	FCLexer()=default;
-	FCLexer(const ::std::string);
+	FCLexer(const ::std::string&);
 	FCLexer& operator=(const FCLexer& oth)
 	{
 		m_inputSrc = oth.m_inputSrc;

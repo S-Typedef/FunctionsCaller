@@ -2,7 +2,7 @@
 
 #include "lexer.h"
 
-FCLexer::FCLexer(const ::std::string input):m_inputSrc(input)
+FCLexer::FCLexer(const ::std::string& input):m_inputSrc(input)
 {
 	m_curTok = ' ';
 	m_resTok.identifier = "";
@@ -203,11 +203,11 @@ LexerErrorCode FCLexer::generateNextTok()
 		{
 			return m_resTok;
 		}
-		case LexerErrorCode::OP :
+		case LexerErrorCode::OPERATOR :
 		{
 			return m_resTok;
 		}
-		case LexerErrorCode::COMMENT :
+		case LexerErrorCode::COMMA :
 		{
 			return m_resTok;
 		}
@@ -217,7 +217,7 @@ LexerErrorCode FCLexer::generateNextTok()
 		}
 			break;
 		default:
-			return ::std::m_resTok;
+			return m_resTok;
 	}
 	return ::std::nullopt;
 }
