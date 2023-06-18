@@ -2,7 +2,7 @@
 
 #include "lexer.h"
 
-FCLexer::FCLexer(const ::std::string& input):m_inputSrc(input)
+FCLexer::FCLexer(const ::std::string input):m_inputSrc(input)
 {
 	m_curTok = ' ';
 	m_resTok.identifier = "";
@@ -42,6 +42,9 @@ LexerErrorCode FCLexer::generateNextTok()
 			m_resTok.identifier += m_curTok;
 			
 		}while (true);
+
+		if ("def" == m_resTok.identifier)
+			return m_lastGenerateResult = LexerErrorCode::FUNCDEF;
 		return m_lastGenerateResult = LexerErrorCode::IDENTIFIER;
 	}
 
@@ -67,6 +70,89 @@ LexerErrorCode FCLexer::generateNextTok()
 			return m_lastGenerateResult = LexerErrorCode::DOUBLE;
 		return m_lastGenerateResult = LexerErrorCode::INTEGER;
 	}
+
+	if ('"' == m_curTok)
+	{
+		if (!readInput())
+			return m_lastGenerateResult = LexerErrorCode::INVALID;
+		
+		if ('"' == m_curTok)
+		{
+			m_resTok.identifier = "";
+			return m_lastGenerateResult = LexerErrorCode::STRING;
+		}
+		m_resTok.identifier += m_curTok;
+		do
+		{
+			if (!readInput())
+				break;
+			if ('"' == m_curTok)
+				break;
+			if (!isalpha(m_curTok))
+				return m_lastGenerateResult = LexerErrorCode::INVALID;
+
+			m_resTok.identifier += m_curTok;
+		}while (true);
+		
+		return m_lastGenerateResult = LexerErrorCode::STRING;
+	}
+
+	if ('#' == m_curTok)
+	{
+		do
+		{
+			if (!readInput())
+				break;
+		}while(m_curTok != EOF && m_curTok != '\n' && m_curTok != '\r');
+		return m_lastGenerateResult = LexerErrorCode::COMMENT;
+	}
+
+	if (m_curTok == EOF || !readInput())
+	{
+		m_curTok = ' ';
+		return m_lastGenerateResult = LexerErrorCode::END;
+	}
+	if (m_curTok == '(')
+	{
+		m_resTok.identifier += m_curTok;
+		return m_lastGenerateResult = LexerErrorCode::LEFTBRACKET;
+	}
+	if (m_curTok == ')')
+	{
+		m_resTok.identifier += m_curTok;
+		return m_lastGenerateResult = LexerErrorCode::RIGHTBRACKET;
+	}
+	if (m_curTok == '+')
+	{
+		m_resTok.identifier += m_curTok;
+		return m_lastGenerateResult = LexerErrorCode::OPERATOR;
+	}
+	if (m_curTok == '-')
+	{
+		m_resTok.identifier += m_curTok;
+		return m_lastGenerateResult = LexerErrorCode::OPERATOR;
+	}
+	if (m_curTok == '*')
+	{
+		m_resTok.identifier += m_curTok;
+		return m_lastGenerateResult = LexerErrorCode::OPERATOR;
+	}
+	if (m_curTok == '/')
+	{
+		m_resTok.identifier += m_curTok;
+		return m_lastGenerateResult = LexerErrorCode::OPERATOR;
+	}
+	if (m_curTok == '%')
+	{
+		m_resTok.identifier += m_curTok;
+		return m_lastGenerateResult = LexerErrorCode::OPERATOR;
+	}
+	if (m_curTok == ',')
+	{
+		m_resTok.identifier += m_curTok;
+		return m_lastGenerateResult = LexerErrorCode::COMMA;
+	}
+
 	return m_lastGenerateResult = LexerErrorCode::INVALID;
 }
 
@@ -105,13 +191,33 @@ LexerErrorCode FCLexer::generateNextTok()
 		{
 			return m_resTok;
 		}
+		case LexerErrorCode::FUNCDEF :
+		{
+			return m_resTok;
+		}
+		case LexerErrorCode::STRING :
+		{
+			return m_resTok;
+		}
+		case LexerErrorCode::COMMENT :
+		{
+			return m_resTok;
+		}
+		case LexerErrorCode::OP :
+		{
+			return m_resTok;
+		}
+		case LexerErrorCode::COMMENT :
+		{
+			return m_resTok;
+		}
 		case LexerErrorCode::INVALID :
 		{
 			return ::std::nullopt;
 		}
 			break;
 		default:
-			return ::std::nullopt;
+			return ::std::m_resTok;
 	}
 	return ::std::nullopt;
 }

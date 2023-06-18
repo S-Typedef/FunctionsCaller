@@ -22,10 +22,19 @@ public:
 		int 			integetNumber = 0;
 		double 			floatNumber = 0.;
 		::std::string 	identifier;
+		char 			op;
 	};
 
 public:
-	FCLexer(const ::std::string&);
+	FCLexer()=default;
+	FCLexer(const ::std::string);
+	FCLexer& operator=(const FCLexer& oth)
+	{
+		m_inputSrc = oth.m_inputSrc;
+		m_currentIdx = m_inputSrc.cbegin();
+		m_inputEnd = m_inputSrc.cend();
+		return *this;
+	}
 	~FCLexer() = default;
 	LexerErrorCode generateNextTok();
 	::std::optional<item_type> getTok();
