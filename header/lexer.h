@@ -22,6 +22,7 @@ public:
 		int 			integetNumber = 0;
 		double 			floatNumber = 0.;
 		::std::string 	identifier;
+		::std::string 	stringDate;
 		char 			op;
 	};
 

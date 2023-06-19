@@ -6,7 +6,8 @@
 std::unique_ptr<ExprAST> Parser::analyse(const std::string& source)
 {
 	m_lexer = FCLexer{source};
-	switch (m_lexer.generateNextTok())
+	getNextToken();
+	switch (m_lastErrorCode)
 	{
 		case LexerErrorCode::FUNCDEF :
 			break;
@@ -135,22 +136,38 @@ std::unique_ptr<ExprAST> Parser::parseIdentifierExpr()
 
 std::unique_ptr<ExprAST> Parser::parseStringExpr()
 {
-	return std::make_unique<IntegerExprAST>(m_lexer.getTok().value().integetNumber);
+	return std::make_unique<IntegerExprAST>(m_curTok.stringDate);
 }
 
 std::unique_ptr<ExprAST> Parser::parseParenExpr()
 {
-	return std::make_unique<IntegerExprAST>(m_lexer.getTok().value().integetNumber);
+	getNextToken(); // 拿掉(
+	if (LexerErrorCode::INVALID == m_lastErrorCode)
+		return nullptr;
+
+	auto E = parseExpression();
+	if (!E)
+		return nullptr;
+
+	getNextToken();
+	if (LexerErrorCode::INVALID == m_lastErrorCode)
+		return nullptr;
+
+	if (m_curTok != ')')
+		return logError("expected ')'");
+
+	getNextToken(); // 拿掉)
+	return E;
 }
 
 std::unique_ptr<ExprAST> Parser::parseIntegerExpr()
 {
-	return std::make_unique<IntegerExprAST>(m_lexer.getTok().value().integetNumber);
+	return std::make_unique<IntegerExprAST>(m_curTok.integetNumber);
 }
 
 std::unique_ptr<ExprAST> Parser::parseFloatExpr()
 {
-	return std::make_unique<FloatExprAST>(m_lexer.getTok().value().floatNumber);
+	return std::make_unique<FloatExprAST>(m_curTok.floatNumber);
 }
 
 void Parser::getNextToken()
