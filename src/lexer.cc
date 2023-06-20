@@ -78,10 +78,10 @@ LexerErrorCode FCLexer::generateNextTok()
 		
 		if ('"' == m_curTok)
 		{
-			m_resTok.identifier = "";
+			m_resTok.stringDate = "";
 			return m_lastGenerateResult = LexerErrorCode::STRING;
 		}
-		m_resTok.identifier += m_curTok;
+		m_resTok.stringDate += m_curTok;
 		do
 		{
 			if (!readInput())
@@ -91,7 +91,7 @@ LexerErrorCode FCLexer::generateNextTok()
 			if (!isalpha(m_curTok))
 				return m_lastGenerateResult = LexerErrorCode::INVALID;
 
-			m_resTok.identifier += m_curTok;
+			m_resTok.stringDate += m_curTok;
 		}while (true);
 		
 		return m_lastGenerateResult = LexerErrorCode::STRING;
@@ -103,6 +103,7 @@ LexerErrorCode FCLexer::generateNextTok()
 		{
 			if (!readInput())
 				break;
+			m_resTok.stringDate += m_curTok;
 		}while(m_curTok != EOF && m_curTok != '\n' && m_curTok != '\r');
 		return m_lastGenerateResult = LexerErrorCode::COMMENT;
 	}
@@ -114,42 +115,42 @@ LexerErrorCode FCLexer::generateNextTok()
 	}
 	if (m_curTok == '(')
 	{
-		m_resTok.identifier += m_curTok;
+		m_resTok.op = m_curTok;
 		return m_lastGenerateResult = LexerErrorCode::LEFTBRACKET;
 	}
 	if (m_curTok == ')')
 	{
-		m_resTok.identifier += m_curTok;
+		m_resTok.op = m_curTok;
 		return m_lastGenerateResult = LexerErrorCode::RIGHTBRACKET;
 	}
 	if (m_curTok == '+')
 	{
-		m_resTok.identifier += m_curTok;
+		m_resTok.op = m_curTok;
 		return m_lastGenerateResult = LexerErrorCode::OPERATOR;
 	}
 	if (m_curTok == '-')
 	{
-		m_resTok.identifier += m_curTok;
+		m_resTok.op = m_curTok;
 		return m_lastGenerateResult = LexerErrorCode::OPERATOR;
 	}
 	if (m_curTok == '*')
 	{
-		m_resTok.identifier += m_curTok;
+		m_resTok.op = m_curTok;
 		return m_lastGenerateResult = LexerErrorCode::OPERATOR;
 	}
 	if (m_curTok == '/')
 	{
-		m_resTok.identifier += m_curTok;
+		m_resTok.op = m_curTok;
 		return m_lastGenerateResult = LexerErrorCode::OPERATOR;
 	}
 	if (m_curTok == '%')
 	{
-		m_resTok.identifier += m_curTok;
+		m_resTok.op = m_curTok;
 		return m_lastGenerateResult = LexerErrorCode::OPERATOR;
 	}
 	if (m_curTok == ',')
 	{
-		m_resTok.identifier += m_curTok;
+		m_resTok.op = m_curTok;
 		return m_lastGenerateResult = LexerErrorCode::COMMA;
 	}
 

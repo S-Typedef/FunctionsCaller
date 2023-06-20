@@ -1,4 +1,4 @@
-#include "parser.h"
+﻿#include "parser.h"
 #include "exprAST.h"
 
 #include <map>
@@ -14,7 +14,7 @@ std::unique_ptr<ExprAST> Parser::analyse(const std::string& source)
 		case LexerErrorCode::COMMENT :
 			break;
 		default :
-			parseFullExpr();
+			return parseFullExpr();
 			break;
 	}
 	
@@ -25,7 +25,7 @@ std::unique_ptr<ExprAST> Parser::parseFullExpr()
 {
 	if (auto E = parseExpression())
 	{
-		return nullptr;
+		return std::move(E);
 		// //有名函数亦被封装为匿名函数调用
 		// auto Proto = std::make_unique<KPrototypeAST>("__anon_expr",
 		// 	std::vector<KVariableExprAST>());
@@ -37,6 +37,7 @@ std::unique_ptr<ExprAST> Parser::parseFullExpr()
 std::unique_ptr<ExprAST> Parser::parseExpression()
 {
 	auto LHS = parsePrimaryExpr();
+	return std::move(LHS);
 	if (!LHS)
 		return nullptr;
 	
