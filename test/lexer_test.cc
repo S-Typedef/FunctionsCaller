@@ -1,8 +1,9 @@
-#include <iostream>
+﻿#include <iostream>
 #include <cassert>
 
 #include "lexer.h"
-
+#include "parser.h"
+#include "exprAST.h"
 
 int main()
 {
@@ -61,6 +62,12 @@ int main()
 		FCLexer lexer{"2. "};
 		assert(lexer.generateNextTok() == LexerErrorCode::DOUBLE);
 		assert(abs(lexer.getTok().value().floatNumber - 2) <= 1e-5);
+	}
+
+	{
+		Parser p;
+		auto aa = std::move(p.analyse("Hello"));
+		aa->showInfo();
 	}
 
 	return 0;
