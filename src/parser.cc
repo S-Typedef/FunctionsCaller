@@ -1,4 +1,4 @@
-﻿#include "parser.h"
+#include "parser.h"
 #include "exprAST.h"
 
 #include <map>
@@ -136,7 +136,7 @@ std::unique_ptr<ExprAST> Parser::parseIdentifierExpr()
 
 std::unique_ptr<ExprAST> Parser::parseStringExpr()
 {
-	return std::make_unique<IntegerExprAST>(m_curTok.stringDate);
+	return std::make_unique<StringExprAST>(m_curTok.stringDate);
 }
 
 std::unique_ptr<ExprAST> Parser::parseParenExpr()
@@ -153,8 +153,8 @@ std::unique_ptr<ExprAST> Parser::parseParenExpr()
 	if (LexerErrorCode::INVALID == m_lastErrorCode)
 		return nullptr;
 
-	if (m_curTok != ')')
-		return logError("expected ')'");
+	if (LexerErrorCode::RIGHTBRACKET != m_lastErrorCode)
+		return nullptr;
 
 	getNextToken(); // 拿掉)
 	return E;
